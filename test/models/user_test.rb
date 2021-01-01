@@ -20,4 +20,15 @@ class UserTest < ActiveSupport::TestCase
     @user.email = " "
     assert_not @user.valid?
   end
+
+  # 文字列の長さの検証
+  test "name should not be too long" do
+    @user.name = "a" * 51   # バリデーションで50を上限としたから51で検証
+    assert_not @user.valid?
+  end
+
+  test "email should not be too long" do
+    @user.email = "a" * 244 + "@example.com" # バリデーションで255を上限としたから256で検証
+    assert_not @user.valid?
+  end
 end
