@@ -54,4 +54,25 @@ class UserTest < ActiveSupport::TestCase
       assert_not @user.valid?, "#{invalid_address.inspect} should be invalid"
     end
   end
+
+  # 重複するメアド拒否のテスト(uniquenessバリデーションのチェック)
+  test "email addresses should be unique" do
+    # dupメソッドはオブジェクトのコピーを作成する:https://www.sejuku.net/blog/76564
+    duplicate_user = @user.dup
+    duplicate_user.email = @user.email.upcase  # 大文字にしてもちゃんとはじいてくれるか
+    @user.save
+    # @user保存後では、複製されたユーザーのメアドが既にDB内に存在するため、重複したメアドのユーザの作成は無効になるはず
+    assert_not duplicate_user.valid?
+  end
+
+  # db保存前にemailを小文字に変換する機能がちゃんと機能しているかチェック
+  # 機能はuser.rb見ればわかるよ
+  test "email addresses should be saved as lower-case" do
+    mixed_case_email = "Foo@ExAMPle.CoM"
+    @user.email = mixed_case_email
+    @user.save
+    # 値が一致しているかどうか確認
+    # reloadメソッドは、DBの値に合わせて値を更新するメソッド
+    assert_equal mixed_case_email.downcase, @user.reload.email
+  end
 end
