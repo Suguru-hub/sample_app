@@ -59,7 +59,7 @@ class UserTest < ActiveSupport::TestCase
   test "email addresses should be unique" do
     # dupメソッドはオブジェクトのコピーを作成する:https://www.sejuku.net/blog/76564
     duplicate_user = @user.dup
-    duplicate_user.email = @user.email.upcase  # 大文字にしてもちゃんとはじいてくれるか
+    duplicate_user.email = @user.email.upcase  # 大文字にしてもちゃんとはじいてくれるか(大文字小文字を区別しないようにしているので)
     @user.save
     # @user保存後では、複製されたユーザーのメアドが既にDB内に存在するため、重複したメアドのユーザの作成は無効になるはず
     assert_not duplicate_user.valid?

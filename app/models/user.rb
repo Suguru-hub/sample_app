@@ -14,4 +14,13 @@ class User < ApplicationRecord
     validates :email, presence: true, length: {maximum: 255},
                 format: {with: VALID_EMAIL_REGEX},  # 正規表現のバリデーション
                 uniqueness: {case_sensitive: false}
+
+    # has_secure_passwordによって以下のことが可能になる(Userテーブルにpassword_digestカラムを追加しておくのを忘れずに)
+    # ・セキュアにハッシュ化したパスワードを、DB内のpassword_digestという属性に保存できるようになる。
+    # ・2つのペアの仮想的な属性 (passwordとpassword_confirmation) が使えるようになる。また、存在性と値が一致するかどうかのバリデーションも追加される。
+    # ・authenticateメソッドが使えるようになる (引数の文字列がpasswordと一致するとUserオブジェクトを、間違っているとfalseを返すメソッド) 。
+    # また、has_secure_passwordを使ってパスワードをハッシュ化するためには、最先端のハッシュ関数であるbcryptが必要。
+    # bcryptを使うためには、bcrypt gemをGemfileに追加し、bundle install
+    # https://railstutorial.jp/chapters/modeling_users?version=5.1#code-bcrypt_ruby
+    has_secure_password
 end
