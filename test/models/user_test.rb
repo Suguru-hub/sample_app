@@ -76,4 +76,17 @@ class UserTest < ActiveSupport::TestCase
     # reloadメソッドは、DBの値に合わせて値を更新するメソッド
     assert_equal mixed_case_email.downcase, @user.reload.email
   end
+
+  # passwordが空の時ちゃんとはじいてくれるかどうか
+  test "password should be present (nonblank)" do
+    # passwordとpassword_confirmationに対して同時に代入(多重代入)
+    @user.password = @user.password_confirmation = " " * 6
+    assert_not @user.valid?
+  end
+
+  # passwordの長さが最小文字数(6文字に設定した)に満たない場合、ちゃんとはじいてくれるかどうか
+  test "password should have a minimum length" do
+    @user.password = @user.password_confirmation = "a" * 5
+    assert_not @user.valid?
+  end
 end

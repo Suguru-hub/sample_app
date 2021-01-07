@@ -23,4 +23,5 @@ class User < ApplicationRecord
     # bcryptを使うためには、bcrypt gemをGemfileに追加し、bundle install
     # https://railstutorial.jp/chapters/modeling_users?version=5.1#code-bcrypt_ruby
     has_secure_password
+    validates :password, presence: true, length: {minimum: 6}
 end
