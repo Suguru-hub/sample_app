@@ -10,6 +10,12 @@
     <div class="container">
         <%= yield %>
         <%= render("layouts/footer") %>
+        <!-- デバッグ用の情報表示
+             本番環境に展開したアプリではデバッグ情報を表示したくないので、
+             if Rails.env.development?を記述
+             Rails.env.development?がtrueになるのは開発環境に限られる。
+             詳しくは、https://railstutorial.jp/chapters/sign_up?version=5.1#aside-rails_environments -->
+        <%= debug(params) if Rails.env.development? %>
     </div>
 </body>
 
