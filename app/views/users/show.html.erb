@@ -1,6 +1,17 @@
-<h1><%= Time.now %></h1>
-<%= @user.name %>, <%= @user.email %>
-<ul>
-    <li>@user.created_at: <%= @user.created_at %></li>
-    <li>@user.updated_at: <%= @user.updated_at %></li>
-</ul>
+<!--provideメソッドについて：https://qiita.com/Naoki_Egawa/items/4b600e0208f1959f85c7-->
+<% provide(:title, @user.name) %>
+<div class="row">
+    <aside class="col-md-4">
+        <section class="user_info">
+            <h1>
+                <!--
+            gravatar_for:"app/helpers/users_helper.rb"参照
+            引数で与えられたユーザーのGravatar画像を返すヘルパーメソッド
+            自作のヘルパーメソッドです
+            -->
+                <%= gravatar_for @user %>
+                <%= @user.name %>
+            </h1>
+        </section>
+    </aside>
+</div>
