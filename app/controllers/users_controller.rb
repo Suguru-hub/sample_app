@@ -11,4 +11,8 @@ class UsersController < ApplicationController
     # デバッグ用メソッドなので通常は削除・コメントアウトしておくべき
     # debugger
   end
+
+  def new
+    @user = User.new
+  end
 end
