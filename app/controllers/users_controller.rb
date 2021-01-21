@@ -27,7 +27,15 @@ class UsersController < ApplicationController
 
   private
 
+  # Strong Parameters セキュリティが強い(意図しない・安全でないデータの登録・更新を防いでくれる)
+  # https://qiita.com/ozackiee/items/f100fd51f4839b3fdca8
     def user_params
+      # 送信されてくるパラメータに:userというキーが必須で、
+      # :userはハッシュ型の値を持っていて、それには:name,:email...のキーのみを許可すると下記コードは言っている。
+      # 許可していないカラム(キー)が存在した場合、そのデータは取得されず無視される。
+      # 例えば以下のコードなら、:userのハッシュに:unkoキーがあったら,permitに指定されていないので
+      # 無視される。
+      # このコードの戻り値は、許可された属性のみが含まれたparamsのハッシュ.つまり:userハッシュ
       params.require(:user).permit(:name, :email, :password,
                                    :password_confirmation)
     end
