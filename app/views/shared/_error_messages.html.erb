@@ -1,0 +1,18 @@
+<!--フォーム送信時にエラーメッセージを表示するためのパーシャル-->
+<!--パーシャルとは：https://qiita.com/d0ne1s/items/154a5faa5ae09466e637-->
+<!-- any?メソッドは要素が1つでもあればtrue(empty?の逆の動作) -->
+<% if @user.errors.any? %>
+<div id="error_explanation">
+    <div class="alert alert-danger">
+        <!--countメソッドはエラーの数を返します-->
+        <!-- pluralizeメソッドとは：https://qiita.com/ryouya3948/items/d39fedc511402f4c390d
+             こんなメソッドもあるんだな。すげえ-->
+        The form contains <%= pluralize(@user.errors.count, "error") %>.
+    </div>
+    <ul>
+        <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+        <% end %>
+    </ul>
+</div>
+<% end %>
