@@ -3,7 +3,13 @@ Rails.application.routes.draw do
   get  '/help',    to: 'static_pages#help'  # help_pathという名前付きルートができる
   get  '/about',   to: 'static_pages#about'
   get  '/contact', to: 'static_pages#contact'
-  get  '/signup',  to: 'users#new'
+  get  '/signup',  to: 'users#new'     # signup_path
+  
+  # resources :usersがあるのに、下記routingを書いた意味は演習2参照（下記リンク先のちょっと上にあるよ）
+  # 検索バーの表示URLの気持ち悪さ解消のためだね。ざっくりいうと。
+  # https://railstutorial.jp/chapters/sign_up?version=5.1#code-post_signup
+  post '/signup',  to: 'users#create'  # signup_path
+
   # RESTfulなusersリソースで必要となるすべてのアクションが利用できるようになる。
   # 詳しくは以下参照
   # https://railstutorial.jp/chapters/sign_up?version=5.1#table-RESTful_users
