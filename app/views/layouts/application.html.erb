@@ -14,7 +14,8 @@
             alert-successとなる。
             Bootstrap CSSは、このようなflashのクラス用に4つのスタイルを持っている(success、info、warning、danger)。 -->
         <% flash.each do |message_type, message| %>
-            <div class="alert alert-<%= message_type %>"><%= message %></div>
+            <!-- 以下のヘルパーによってどんなHTMLコードが生成されるかなんとなくわかる? -->
+            <%= content_tag(:div, message, class: "alert alert-#{message_type}") %>
         <% end %>
         <%= yield %>
         <%= render("layouts/footer") %>

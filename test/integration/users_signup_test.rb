@@ -2,6 +2,7 @@ require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
 
+  # 失敗時のテスト
   test "invalid signup information" do
     get signup_path
     # テストの前後でUser.countの値に差(difference)がないか(下記の不正なユーザが登録されていないこと)をチェック
@@ -24,5 +25,20 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
     # 下記アサートを書いた意味は演習４参照（下記リンク先のちょっと上にあるよ）
     # https://railstutorial.jp/chapters/sign_up?version=5.1#code-post_signup_form
     assert_select 'form[action="/signup"]'
+  end
+
+  # 有効なユーザー登録に対するテスト
+  test "valid signup information" do
+    get signup_path
+    # テストの前後でUser.countの値に1の差(第二引数)があるか(下記のユーザが登録されていること)をチェック
+    assert_difference 'User.count', 1 do
+      post users_path, params: { user: { name:  "Example User",
+                                         email: "user@example.com",
+                                         password:              "password",
+                                         password_confirmation: "password" } }
+    end
+    follow_redirect!              # リクエストを送信した結果を見て、指定されたリダイレクト先に移動する
+    assert_template 'users/show'  # ↑の結果、users/showテンプレートが表示されているかチェック
+    assert_not flash.empty?
   end
 end
