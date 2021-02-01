@@ -18,6 +18,7 @@ class SessionsController < ApplicationController
       # そこで、flash.nowを使う。
       # flashのメッセージとは異なり、
       # flash.nowのメッセージはその後リクエストが発生したときに消滅します
+      # 解説記事：https://qiita.com/taraontara/items/2db82e6a0b528b06b949#%E3%81%97%E3%81%8F%E3%81%BF
       flash.now[:danger] = 'Invalid email/password combination'
       render 'new'
     end
