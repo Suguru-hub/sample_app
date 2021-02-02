@@ -5,7 +5,8 @@ class SessionsController < ApplicationController
   def create
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
-      # ユーザーログイン後にユーザー情報のページにリダイレクトする
+      log_in user        # SessionHelperで定義したメソッド
+      redirect_to user   # ユーザーのプロフィールページにリダイレクト
     else
       ## flash[:danger] = 'Invalid email/password combination' ##
       # ↑のコードのままでは、リクエストのフラッシュメッセージが一度表示されると
