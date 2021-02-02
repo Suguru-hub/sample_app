@@ -9,6 +9,8 @@ module SessionsHelper
     def current_user
         if session[:user_id]
             # "a ||= b" は、"a = a || b"と等価
+            # 上の二つの式が等価であること自体はわかると思う
+            # 論理演算の仕組みは次がわかりやすい。https://rubychan.net/logical-operator/
             @current_user ||= User.find_by(id: session[:user_id])
         end
     end
