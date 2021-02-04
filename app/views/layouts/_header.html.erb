@@ -6,7 +6,28 @@
             <ul class="nav navbar-nav navbar-right">
                 <li><%= link_to "Home",   root_path %></li>
                 <li><%= link_to "Help",   help_path %></li>
-                <li><%= link_to "Log in", login_path %></li>
+                <% if logged_in? %>
+                    <!-- TODO: リンク部分を実装する -->
+                    <li><%= link_to "Users", '#' %>
+                    <li class="dropdown">
+                        <!-- TODO: リンク部分を実装する -->
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            Account <b class="caret"></b>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- 以下のリンクトゥは省略形で、link_to "Profile", user_path(current_user) とも書ける -->
+                            <li><%= link_to "Profile", current_user %></li>
+                            <!-- TODO: リンク部分を実装する -->
+                            <li><%= link_to "Settings", '#' %></li>
+                            <li class="divider"></li>
+                            <li>
+                                <%= link_to "Log out", logout_path, method: :delete %>
+                            </li>
+                        </ul>
+                    </li>
+                <% else %>
+                    <li><%= link_to "Log in", login_path %></li>
+                <% end %>
             </ul>
         </nav>
     </div>
