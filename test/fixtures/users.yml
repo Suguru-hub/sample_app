@@ -1,2 +1,10 @@
+# テストフィクスチャとは、テストを実行、成功させるために必要な状態や前提条件の集合のこと
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-# リスト6.31で空にしました
+
+# ユーザーログインのテストで使うfixture
+# 以下を作成することによって、user = users(:michael)のようにフィクスチャのデータを参照できる
+# usersはfixtureのファイル名、:michaelというシンボルはこのユーザーを参照するためのキーを表す
+michael:
+  name: Michael Example
+  email: michael@example.com
+  password_digest: <%= User.digest('password') %>  # erbが使えるんだね
