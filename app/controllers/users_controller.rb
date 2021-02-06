@@ -19,6 +19,7 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     if @user.save
+      log_in @user  # log_inメソッドはsessions_helperで定義した
       flash[:success] = "Welcome to the Sample App!"
       # 新規作成したユーザのプロフィールページへリダイレクト
       redirect_to @user # redirect_to "/users/#{@user.id}" と等価
