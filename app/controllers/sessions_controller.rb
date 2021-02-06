@@ -26,5 +26,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+    log_out                # sessions_helper.rbで定義したヘルパー
+    redirect_to root_url   # _pathと_urlの使い分け：https://qiita.com/higeaaa/items/df8feaa5b6f12e13fb6f
   end
 end

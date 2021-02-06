@@ -5,6 +5,18 @@ module SessionsHelper
         session[:user_id] = user.id
     end
 
+    # 現在のユーザーをログアウトする
+    def log_out
+        session.delete(:user_id)  # user_idキーの値をnilにする
+        # インスタンス変数@current_userをnilにする必要があるのは、
+        # @current_userがdestroyアクションより前に作成され (これは該当しません)、
+        # かつ、リダイレクトを直接発行しなかった場合だけです(これは該当します)。
+        # 現実にこのような条件が発生する可能性はかなり低く、このアプリケーションでも
+        # このような条件を作り出さないように開発しているので、本来はnilに設定する必要は
+        # ありませんが、ここではセキュリティ上の死角を万が一にでも作り出さないためにあえてnilに設定しています。
+        @current_user = nil
+    end
+
     # 現在ログイン中のユーザーを返す(いる場合)
     def current_user
         if session[:user_id]
