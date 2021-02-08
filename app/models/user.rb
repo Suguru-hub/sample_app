@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+    attr_accessor :remember_token
+
     # ユーザをDBに保存する前にemailを小文字に変換
     # いくつかのDBのアダプタが、常に大文字小文字を区別するインデックスを使っているとは限らない問題への対処
     # Userモデルの中では右式のselfを省略できるらしい(左式は省略不可)
@@ -30,5 +32,18 @@ class User < ApplicationRecord
         cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
                                                     BCrypt::Engine.cost
         BCrypt::Password.create(string, cost: cost)
+    end
+
+    # ランダムなトークンを返す
+    def User.new_token
+        SecureRandom.urlsafe_base64
+    end
+
+    # 永続セッションのためにユーザーをデータベースに記憶する
+    def remember
+        self.remember_token = User.new_token
+        # DBのモデルのテーブルの対応レコードのremember_digestカラムの値を第二引数の値に更新
+        # バリデーションは無視して更新される。（不正な値でも更新できる）
+        update_attribute(:remember_digest, User.digest(remember_token))
     end
 end
