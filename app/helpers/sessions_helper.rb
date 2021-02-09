@@ -5,6 +5,14 @@ module SessionsHelper
         session[:user_id] = user.id
     end
 
+    # ユーザーのセッションを永続的にする
+    def remember(user)
+        user.remember
+        # 以下は、次のコードと等価 cookies[:remember_token] = { value: user.id, expires: 20.years.from_now.utc }
+        cookies.permanent.signed[:user_id] = user.id
+        cookies.permanent[:remember_token] = user.remember_token
+    end
+
     # 現在のユーザーをログアウトする
     def log_out
         session.delete(:user_id)  # user_idキーの値をnilにする
@@ -17,13 +25,23 @@ module SessionsHelper
         @current_user = nil
     end
 
-    # 現在ログイン中のユーザーを返す(いる場合)
+    # 記憶トークンcookieに対応するユーザーを返す
+    # session[:user_id]が存在すれば一時セッションからユーザーを取り出し、
+    # それ以外の場合はcookies[:user_id]からユーザーを取り出して、対応永続セッションにログイン
     def current_user
-        if session[:user_id]
+        # 「ユーザーIDがユーザーIDのセッションと等しければ...」ではなく、
+        # 「(ユーザーIDにユーザーIDのセッションを代入した結果) ユーザーIDのセッションが存在すれば」
+        if user_id = session[:user_id]
             # "a ||= b" は、"a = a || b"と等価
             # 上の二つの式が等価であること自体はわかると思う
             # 論理演算の仕組みは次がわかりやすい。https://rubychan.net/logical-operator/
-            @current_user ||= User.find_by(id: session[:user_id])
+            @current_user ||= User.find_by(id: user_id)
+        elsif user_id = cookies.signed[:user_id]
+            user = User.find_by(id: user_id)
+            if user && user.authenticated?(cookies[:remember_token])
+                log_in user
+                @current_user = user
+            end
         end
     end
 
