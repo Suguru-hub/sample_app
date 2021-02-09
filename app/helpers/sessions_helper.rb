@@ -13,8 +13,16 @@ module SessionsHelper
         cookies.permanent[:remember_token] = user.remember_token
     end
 
+    # 永続的セッションを破棄する
+    def forget(user)
+        user.forget
+        cookies.delete(:user_id)
+        cookies.delete(:remember_token)
+    end
+
     # 現在のユーザーをログアウトする
     def log_out
+        forget(current_user)
         session.delete(:user_id)  # user_idキーの値をnilにする
         # インスタンス変数@current_userをnilにする必要があるのは、
         # @current_userがdestroyアクションより前に作成され (これは該当しません)、
