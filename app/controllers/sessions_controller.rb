@@ -6,7 +6,8 @@ class SessionsController < ApplicationController
     user = User.find_by(email: params[:session][:email].downcase)
     if user && user.authenticate(params[:session][:password])
       log_in user        # SessionHelperで定義したメソッド
-      remember user      # ログインしたユーザーを保持(sessions_helper)
+      # remember_meチェックボックスの値
+      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
       redirect_to user   # ユーザーのプロフィールページにリダイレクト
     else
       ## flash[:danger] = 'Invalid email/password combination' ##
