@@ -3,12 +3,12 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by(email: params[:session][:email].downcase)
-    if user && user.authenticate(params[:session][:password])
-      log_in user        # SessionHelperで定義したメソッド
+    @user = User.find_by(email: params[:session][:email].downcase)
+    if @user && @user.authenticate(params[:session][:password])
+      log_in @user        # SessionHelperで定義したメソッド
       # remember_meチェックボックスの値
-      params[:session][:remember_me] == '1' ? remember(user) : forget(user)
-      redirect_to user   # ユーザーのプロフィールページにリダイレクト
+      params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
+      redirect_to @user   # ユーザーのプロフィールページにリダイレクト
     else
       ## flash[:danger] = 'Invalid email/password combination' ##
       # ↑のコードのままでは、リクエストのフラッシュメッセージが一度表示されると
