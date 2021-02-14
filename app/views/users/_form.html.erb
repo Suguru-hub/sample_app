@@ -1,0 +1,21 @@
+<!-- userのnewとeditフォーム用のパーシャル -->
+<!--パーシャルとは：https://qiita.com/d0ne1s/items/154a5faa5ae09466e637-->
+
+<%= form_for(@user, url: yield(:path)) do |f| %>
+    <!--パーシャル呼び出し-->
+    <%= render 'shared/error_messages', object: @user %>
+
+    <%= f.label :name %>
+    <%= f.text_field :name, class: 'form-control' %>
+
+    <%= f.label :email %>
+    <%= f.email_field :email, class: 'form-control' %>
+
+    <%= f.label :password %>
+    <%= f.password_field :password, class: 'form-control' %>
+
+    <%= f.label :password_confirmation, "Confirmation" %>
+    <%= f.password_field :password_confirmation, class: 'form-control' %>
+
+    <%= f.submit yield(:button_text), class: "btn btn-primary" %>
+<% end %>

@@ -28,6 +28,10 @@ class UsersController < ApplicationController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+  end
+
   private
 
   # Strong Parameters セキュリティが強い(意図しない・安全でないデータの登録・更新を防いでくれる)

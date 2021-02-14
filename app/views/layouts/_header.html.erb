@@ -17,8 +17,7 @@
                         <ul class="dropdown-menu">
                             <!-- 以下のリンクトゥは省略形で、link_to "Profile", user_path(current_user) とも書ける -->
                             <li><%= link_to "Profile", current_user %></li>
-                            <!-- TODO: リンク部分を実装する -->
-                            <li><%= link_to "Settings", '#' %></li>
+                            <li><%= link_to "Settings", edit_user_path(current_user) %></li>
                             <li class="divider"></li>
                             <li>
                                 <%= link_to "Log out", logout_path, method: :delete %>
