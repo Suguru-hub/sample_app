@@ -32,9 +32,9 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def updated
+  def update
     @user = User.find(params[:id])
-    if @user.update_attiributes(user_params)  # user_paramsはStrong Parameters↓
+    if @user.update_attributes(user_params)  # user_paramsはStrong Parameters↓
       # 更新に成功した場合を扱う
     else
       render 'edit'
