@@ -32,12 +32,21 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
+  def updated
+    @user = User.find(params[:id])
+    if @user.update_attiributes(user_params)  # user_paramsはStrong Parameters↓
+      # 更新に成功した場合を扱う
+    else
+      render 'edit'
+    end
+  end
+
   private
 
   # Strong Parameters セキュリティが強い(意図しない・安全でないデータの登録・更新を防いでくれる)
   # https://qiita.com/ozackiee/items/f100fd51f4839b3fdca8
     def user_params
-      # 送信されてくるパラメータに:userというキーが必須で、
+      # 送信されてくるparamsに:userというキーが必須で、
       # :userはハッシュ型の値を持っていて、それには:name,:email...のキーのみを許可すると下記コードは言っている。
       # 許可していないカラム(キー)が存在した場合、そのデータは取得されず無視される。
       # 例えば以下のコードなら、:userのハッシュに:unkoキーがあったら,permitに指定されていないので
