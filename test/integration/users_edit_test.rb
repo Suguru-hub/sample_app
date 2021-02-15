@@ -21,7 +21,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     }
     assert_template 'users/edit'   # editビューが再描画されるかチェック
     # assert_select使い方 https://qiita.com/shumpeism/items/06332cb4ced1c15cb09c
-    assert_select 'div.alert', count: 4   # 正しい数のエラーメッセージが表示されているか
+    assert_select 'div.alert', 'The form contains 4 errors.'   # 正しい数のエラーメッセージが表示されているか
   end
 
 end
