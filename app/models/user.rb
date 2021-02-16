@@ -25,7 +25,12 @@ class User < ApplicationRecord
     # bcryptを使うためには、bcrypt gemをGemfileに追加し、bundle install
     # https://railstutorial.jp/chapters/modeling_users?version=5.1#code-bcrypt_ruby
     has_secure_password
-    validates :password, presence: true, length: {minimum: 6}
+
+    # allow_nil: trueによって、パスワードが空でも更新できるようなる
+    # ただし、これによって新規ユーザー登録時に空のパスワードが有効になってしまうことはない。
+    # has_secure_passwordでは (追加したバリデーションとは別に) オブジェクト生成時に存在性を検証するようになっているため、
+    # 空のパスワード (nil) が新規ユーザー登録時に有効になることはない。
+    validates :password, presence: true, length: {minimum: 6}, allow_nil: true
 
     # 渡された文字列のハッシュ値を返す
     def User.digest(string)
