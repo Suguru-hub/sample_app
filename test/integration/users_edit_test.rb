@@ -8,6 +8,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
 
   # 編集の失敗に対するテスト
   test "unsuccessful edit" do
+    log_in_as(@user)               # users_controllerにbefore_action追加したので追加
     get edit_user_path(@user)      # 編集ページにアクセス
     assert_template 'users/edit'   # editビューが描画されるかチェック
     patch user_path(@user),        # patchリクエストで無効なユーザー情報送信
@@ -26,6 +27,7 @@ class UsersEditTest < ActionDispatch::IntegrationTest
 
   # 編集の成功に対するテスト
   test "successful edit" do
+    log_in_as(@user)
     get edit_user_path(@user)
     assert_template 'users/edit'
     name = "Foo Bar"
