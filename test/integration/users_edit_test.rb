@@ -26,10 +26,14 @@ class UsersEditTest < ActionDispatch::IntegrationTest
   end
 
   # 編集の成功に対するテスト
-  test "successful edit" do
-    log_in_as(@user)
+  # フレンドリーフォワーディング(ログインしていないユーザーが編集ページにアクセス→
+  # ログインページに飛ばされてログイン→親切に編集ページに飛ばしてあげたい)のテスト
+  test "successful edit with friendly forwarding" do
     get edit_user_path(@user)
-    assert_template 'users/edit'
+    assert_equal edit_user_url(@user), session[:forwarding_url]
+    log_in_as(@user)
+    assert_redirected_to edit_user_url(@user)
+    assert_nil(session[:forwarding_url])
     name = "Foo Bar"
     email = "foo@bar.com"
     patch user_path(@user),

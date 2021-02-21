@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
       log_in @user        # SessionHelperで定義したメソッド
       # remember_meチェックボックスの値
       params[:session][:remember_me] == '1' ? remember(@user) : forget(@user)
-      redirect_to @user   # ユーザーのプロフィールページにリダイレクト
+      redirect_back_or @user   # フレンドリーフォワーディング(引数がデフォルト値)
     else
       ## flash[:danger] = 'Invalid email/password combination' ##
       # ↑のコードのままでは、リクエストのフラッシュメッセージが一度表示されると

@@ -62,4 +62,19 @@ module SessionsHelper
     def logged_in?
         !current_user.nil?
     end
+
+    # フレンドリーフォワーディングの実装
+    # 記憶したURL(もしくはデフォルト値)にリダイレクト
+    def redirect_back_or(default)
+        redirect_to(session[:forwarding_url] || default)
+        session.delete(:forwarding_url)
+    end
+
+    # フレンドリーフォワーディングの実装
+    # アクセスしようとしたURLを覚えておく
+    def store_location
+        # request.original_urlでリクエスト先が取得できる
+        # if request.get? によって、GETリクエストが送られた時だけ格納
+        session[:forwarding_url] = request.original_url if request.get?
+    end
 end
