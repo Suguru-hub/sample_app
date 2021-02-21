@@ -7,8 +7,7 @@
                 <li><%= link_to "Home",   root_path %></li>
                 <li><%= link_to "Help",   help_path %></li>
                 <% if logged_in? %>
-                    <!-- TODO: リンク部分を実装する -->
-                    <li><%= link_to "Users", '#' %>
+                    <li><%= link_to "Users", users_path %></li>
                     <li class="dropdown">
                         <!-- TODO: リンク部分を実装する -->
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
