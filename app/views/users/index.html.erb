@@ -5,12 +5,17 @@
 <%= will_paginate %>
 
 <ul class="users">
-  <% @users.each do |user| %>
-    <li>
-      <%= gravatar_for user, size: 50 %>
-      <%= link_to user.name, user %>
-    </li>
-  <% end %>
+    <%
+=begin%>
+  renderのuserはパーシャル(ファイル名の文字列)に対してではなく、
+  Userクラスのuser変数に対して実行している。
+  このとき、Railsは自動的に_user.html.erbという名前のパーシャルを探しに行く。
+
+  @usersに変更。Railsは@usersをUserオブジェクトのリストであると推測し、自動的に
+  ユーザーのコレクションを列挙し、それぞれのユーザーを_user.html.erbパーシャルで出力する。
+<%
+=end%>
+ <%= render @users %>
 </ul>
 
 <%= will_paginate %>
