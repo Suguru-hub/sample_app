@@ -48,4 +48,16 @@ class UsersControllerTest < ActionDispatch::IntegrationTest
     get users_path
     assert_redirected_to login_url
   end
+
+  # admin属性の変更が禁止されていること(StrongParameters)のテスト
+  test "should not allow the admin attribute to be edited via the web" do
+    log_in_as(@other_user)
+    assert_not @other_user.admin?
+    patch user_path(@other_user), params: {
+                                  user:   {
+                                    password: @other_user.password,
+                                    paddword_confirmation: @other_user.password,
+                                    admin: true }}
+    assert_not @other_user.reload.admin?
+  end
 end
