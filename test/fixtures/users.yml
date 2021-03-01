@@ -8,6 +8,7 @@ michael:
   name: Michael Example
   email: michael@example.com
   password_digest: <%= User.digest('password') %>  # erbが使えるんだね
+  admin: true
 
 # 二人目
 archer:
