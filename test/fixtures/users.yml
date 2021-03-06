@@ -9,24 +9,32 @@ michael:
   email: michael@example.com
   password_digest: <%= User.digest('password') %>  # erbが使えるんだね
   admin: true
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # 二人目
 archer:
   name: Sterling Archer
   email: duchess@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # 三人目
 lana:
   name: Lana Kane
   email: hands@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # 四人目
 malory:
   name: Malory Archer
   email: boss@example.gov
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 
 # 埋め込みRubyで30人作成
 <% 30.times do |n| %>
@@ -34,4 +42,6 @@ user_<%= n %>:
   name:  <%= "User #{n}" %>
   email: <%= "user-#{n}@example.com" %>
   password_digest: <%= User.digest('password') %>
+  activated: true
+  activated_at: <%= Time.zone.now %>
 <% end %>

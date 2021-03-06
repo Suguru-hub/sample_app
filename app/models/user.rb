@@ -1,13 +1,12 @@
 class User < ApplicationRecord
-    attr_accessor :remember_token
+    attr_accessor :remember_token, :activation_token
 
     # ユーザをDBに保存する前にemailを小文字に変換
     # いくつかのDBのアダプタが、常に大文字小文字を区別するインデックスを使っているとは限らない問題への対処
-    # Userモデルの中では右式のselfを省略できるらしい(左式は省略不可)
-    # 直接値を更新できるdowncase!メソッドを使って以下のようにしてもいいね
-    # before_save {email.downcase!}
-    before_save {self.email = email.downcase}
-    validates :name, presence: true, length: {maximum: 50}
+    before_save   :downcase_email
+    # ユーザーが作成される前に有効化トークンと有効化ダイジェストを作成
+    before_create :create_activation_digest
+    validates     :name, presence: true, length: {maximum: 50}
     # email用の正規表現を定数変数に格納
     # この正規表現の詳しい意味：https://railstutorial.jp/chapters/modeling_users?version=5.1#table-valid_email_regex
     # Ruby正規表現リファレンスマニュアル：https://docs.ruby-lang.org/ja/latest/doc/spec=2fregexp.html
@@ -62,4 +61,18 @@ class User < ApplicationRecord
     def forget
         update_attribute(:remember_digest, nil)
     end
+
+    private
+
+        # メールアドレスをすべて小文字にする
+        def downcase_email
+            # self.email = email.downcase ←以下なら代入しなくて済む
+            email.downcase!
+        end
+
+        # 有効化トークンとダイジェストを作成および代入する
+        def create_activation_digest
+            self.activation_token  = User.new_token
+            self.activation_digest = User.digest(activation_token)
+        end
 end
