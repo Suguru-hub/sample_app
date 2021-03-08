@@ -1,4 +1,5 @@
 class User < ApplicationRecord
+    # 仮の属性。DBのUserはこれらの値を実際には持っていない。
     attr_accessor :remember_token, :activation_token
 
     # ユーザをDBに保存する前にemailを小文字に変換
