@@ -53,9 +53,10 @@ class User < ApplicationRecord
     end
 
     # 渡されたトークンがダイジェストと一致したらtrueを返す
-    def authenticated?(remember_token)
-        return false if remember_digest.nil?   # BCrypt::Password.new(nil)はエラーになるので、そうなる前にfalse
-        BCrypt::Password.new(remember_digest).is_password?(remember_token)
+    def authenticated?(attribute, token)
+        digest = send("#{attribute}_digest")  # sendメソッドはメタプログラミングの仕組みを利用した特殊なメソッドなので次を参照「https://railstutorial.jp/chapters/account_activation?version=5.1#sec-generalizing_the_authenticated_method」
+        return false if digest.nil?   # BCrypt::Password.new(nil)はエラーになるので、そうなる前にfalse
+        BCrypt::Password.new(digest).is_password?(token)
     end
 
     # ユーザーのログイン情報を破棄する
