@@ -2,6 +2,10 @@ require 'test_helper'
 
 class UsersSignupTest < ActionDispatch::IntegrationTest
 
+  def setup
+    ActionMailer::Base.deliveries.clear
+  end
+
   # 失敗時のテスト
   test "invalid signup information" do
     get signup_path
@@ -28,7 +32,7 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
   end
 
   # 有効なユーザー登録に対するテスト
-  test "valid signup information" do
+  test "valid signup information with account activation" do
     get signup_path
     # テストの前後でUser.countの値に1の差(第二引数)があるか(下記のユーザが登録されていること)をチェック
     assert_difference 'User.count', 1 do
@@ -37,8 +41,23 @@ class UsersSignupTest < ActionDispatch::IntegrationTest
                                          password:              "password",
                                          password_confirmation: "password" } }
     end
+    assert_equal 1, ActionMailer::Base.deliveries.size
+    user = assigns(:user)  # assignsメソッドを使うと対応するアクション内のインスタンス変数にアクセスできるようになる。例えば、Usersコントローラのcreateアクションでは@userインスタンス変数が定義されているが、テストでassigns(:user)と書くとこの変数にアクセスできるようになる
+    assert_not user.activated?
+    # 有効化していない状態でログインしてみる
+    log_in_as(user)
+    assert_not is_logged_in?
+    # 有効化トークンが不正な場合
+    get edit_account_activation_path("invalid token", email: user.email)
+    assert_not is_logged_in?
+    # トークンは正しいがメールアドレスが無効な場合
+    get edit_account_activation_path(user.activation_token, email: 'wrong')
+    assert_not is_logged_in?
+    # 有効化トークンが正しい場合
+    get edit_account_activation_path(user.activation_token, email: user.email)
+    assert user.reload.activated? # 有効化できているか？
     follow_redirect!              # リクエストを送信した結果を見て、指定されたリダイレクト先に移動する
-    # assert_template 'users/show'  # ↑の結果、users/showテンプレートが表示されているかチェック
-    # assert is_logged_in?          # サインアップ後、そのままログインできているか
+    assert_template 'users/show'  # ↑の結果、users/showテンプレートが表示されているかチェック
+    assert is_logged_in?          # サインアップ後、そのままログインできているか
   end
 end
