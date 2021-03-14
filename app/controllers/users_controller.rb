@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def index
     # Usersをページねーとする
-    @users = User.paginate(page: params[:page])
+    @users = User.where(activated: true).paginate(page: params[:page])
   end
 
   def new
@@ -19,6 +19,12 @@ class UsersController < ApplicationController
     # 今後実行中によくわからない挙動があったら、下のようにdebuggerを差し込んで調べてみよう
     # デバッグ用メソッドなので通常は削除・コメントアウトしておくべき
     # debugger
+
+    # userが有効でないならホームにリダイレクトandメソッド終了(showテンプレは呼び出されない)
+    # つまり、アクティブ化されているユーザ以外はroot_urlにリダイレクトして終了（＝個別のユーザページにはアクセスさせない）
+    # a = true && falseの場合は、まずtrue && falseが評価され、その結果がaに代入されます。
+	  # b = true and falseの場合は、b = trueが評価され、その後and falseが実行されるのです。
+    redirect_to root_url and return unless @user.activated?
   end
 
   def new

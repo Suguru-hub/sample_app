@@ -67,8 +67,11 @@ class User < ApplicationRecord
     # アカウントを有効にする
     def activate
         # Userの属性の値を更新(update_attributeはバリデーションを無視)
-        update_attribute(:activated, true)
-        update_attribute(:activated_at, Time.zone.now)
+        # update_attribute(:activated, true)
+        # update_attribute(:activated_at, Time.zone.now)
+
+        # 上記だとDBに2回問い合わせすることになるが、以下なら1回の呼び出しにまとめられる
+        update_columns(activated: true, activated_at: Time.zone.now)
     end
 
     # 有効化用のメールを送信する
