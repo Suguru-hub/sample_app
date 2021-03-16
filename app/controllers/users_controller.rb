@@ -4,7 +4,7 @@ class UsersController < ApplicationController
   before_action :admin_user,     only: :destroy
 
   def index
-    # Usersをページねーとする
+    # Usersをページねーとする(有効化されているユーザーのみ)
     @users = User.where(activated: true).paginate(page: params[:page])
   end
 
