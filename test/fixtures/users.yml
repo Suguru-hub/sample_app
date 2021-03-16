@@ -45,3 +45,11 @@ user_<%= n %>:
   activated: true
   activated_at: <%= Time.zone.now %>
 <% end %>
+
+# アカウントが有効化されていないユーザー
+red:
+  name: Red Kun
+  email: red@example.com
+  password_digest: <%= User.digest("password") %>
+  activated: false   # アカウント有効化されていない
+  activated_at: null
