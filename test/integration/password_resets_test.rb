@@ -48,6 +48,8 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
     get edit_password_reset_path(user.reset_token, email: user.email)
     assert_template 'password_resets/edit'
     assert_select "input[name=email][type=hidden][value=?]", user.email  # <input id="email" name="email" type="hidden" value="michael@example.com" />
+  
+    ### パスワード再設定フォームでパスワードと確認パスワードを入力したときのテスト
 
     # 無効なパスワードとパスワード確認を入力したとき
     patch password_reset_path(user.reset_token),
@@ -69,7 +71,23 @@ class PasswordResetsTest < ActionDispatch::IntegrationTest
                    user:  {password:              "foobaz",
                            password_confirmation: "foobaz"}}
     assert is_logged_in?
+    assert_nil user.reload.reset_digest
     assert_not flash.empty?
     assert_redirected_to user
+  end
+
+  # パスワード再設定の期限切れのテスト
+  test "expired token" do
+    get new_password_reset_path
+    post password_resets_path, params: {password_reset: {email: @user.email}}
+
+    @user = assigns(:user)
+    @user.update_attribute(:reset_sent_at, 3.hours.ago)  # reset_sent_atを3時間前に設定
+    patch password_reset_path(@user.reset_token),
+          params: {email: @user.email, user: {password: "foobar", password_confirmation: "foobar"}}
+    assert_response :redirect
+    follow_redirect!
+    # response.bodyは、そのページのHTML本文をすべて返すメソッド
+    assert_match /expired/i, response.body
   end
 end
