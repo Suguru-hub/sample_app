@@ -1,6 +1,6 @@
 class User < ApplicationRecord
-    # ユーザーがマイクロポストを複数所有する関連付け
-    has_many :microposts
+    # ユーザーがマイクロポストを複数所有する関連付け(後半のオプションによって、ユーザーが削除されれば、そのマイクロポストも削除される)
+    has_many :microposts, dependent: :destroy
 
     # 仮の属性。DBのUserはこれらの値を実際には持っていない。
     attr_accessor :remember_token, :activation_token, :reset_token
