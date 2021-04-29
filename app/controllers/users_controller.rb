@@ -20,6 +20,8 @@ class UsersController < ApplicationController
     # デバッグ用メソッドなので通常は削除・コメントアウトしておくべき
     # debugger
 
+    @microposts = @user.microposts.paginate(page: params[:page])
+
     # userが有効でないならホームにリダイレクトandメソッド終了(showテンプレは呼び出されない)
     # つまり、アクティブ化されているユーザ以外はroot_urlにリダイレクトして終了（＝個別のユーザページにはアクセスさせない）
     # a = true && falseの場合は、まずtrue && falseが評価され、その結果がaに代入されます。
