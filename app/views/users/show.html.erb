@@ -14,4 +14,25 @@
             </h1>
         </section>
     </aside>
+    <div class="col-md-8">
+        <% if @user.microposts.any? %>
+            <h3>Microposts (<%= @user.microposts.count %>)</h3>
+            <ol>
+<%
+=begin%>
+    ※以下の段落は、コピー元の話だけど参考になる。
+  renderのuserはパーシャル(ファイル名の文字列)に対してではなく、
+  Userクラスのuser変数に対して実行している。
+  このとき、Railsは自動的に_user.html.erbという名前のパーシャルを探しに行く。
+
+    ※@usersを@micropostsに置き換えて読んでみて。
+  @usersに変更。Railsは@usersをUserオブジェクトのリストであると推測し、自動的に
+  ユーザーのコレクションを列挙し、それぞれのユーザーを_user.html.erbパーシャルで出力する。
+<%
+=end%>
+                <%= render @microposts %>
+            </ol>
+            <%= will_paginate @microposts %>
+        <% end %>
+    </div>
 </div>
